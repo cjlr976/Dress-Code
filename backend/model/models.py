@@ -1,15 +1,18 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+from db.database import SessionLocal
 
-class Note(Base):
+class Clothing():
+    __type__ = "type"
 
-    __tablename__ = "clothes"
+    #Piece of data storing each individual clothing piece
+    id=Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    note_body = Column(String)
+    nodes = relationship("ClothingNode", back_populates="clothes")
 
     def __repr__(self):
-        return f'Note(id={self.id}, title={self.title}, note_body={self.note_body})'
+        return f'Clothing(id={self.id}, title = {self.title})'

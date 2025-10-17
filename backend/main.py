@@ -3,7 +3,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware #Dealsm with CORS error
 
-from db.database import DBSession
+from db.database import SessionLocal
 from model import models
 
 from schemas.schemas import ClothesInput
@@ -38,17 +38,17 @@ async def read_root() -> dict:
 #API route that query and fetch all the clothes in the database
 @app.get("/clothes")
 def read_clothess():
-    db = DBSession()
+    db = SessionLocal()
     try:
         clothes = db.query(models.Clothes).all()
     finally:
         db.close()
     return clothes
 
-#API routh that adds piece of clothes
+#API route that adds piece of clothes
 @app.post("/clothes")
 def add_clothes(clothes: ClothesInput):
-    db = DBSession()
+    db = SessionLocal()
     try:
         if len(clothes.title) == 0 and len(clothes.clothes_image) == 0:
             raise HTTPException(
@@ -74,7 +74,7 @@ def update_clothes(clothes_id: int, updated_clothes: ClothesInput):
             "status": "Error 400 - Bad Request",
             "msg": "The clothes's `title` and `clothes_body` can't be both empty"
         })
-    db = DBSession()
+    db = SessionLocal()
     try:
         clothes = db.query(models.Clothes).filter(models.Clothes.id == clothes_id).first()
         clothes.title = updated_clothes.title
@@ -88,7 +88,7 @@ def update_clothes(clothes_id: int, updated_clothes: ClothesInput):
 #Route that deletes a piece of clothing
 @app.delete("/clothes/{clothes_id}")
 def delete_clothes(clothes_id: int):
-    db = DBSession()
+    db = SessionLocal()
     try:
         clothes = db.query(models.Clothes).filter(models.Clothes.id == clothes_id).first()
         db.delete(clothes)
