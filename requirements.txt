@@ -1,3 +1,14 @@
-tensorflow
+fastapi 
+uvicorn 
+opencv-python 
+scikit-learn
+ftfy 
+regex 
+tqdm
+tensor
+axios 
+opencv-python 
+matplotlib 
+pandas 
 numpy
-matplotlib
+pydantic
